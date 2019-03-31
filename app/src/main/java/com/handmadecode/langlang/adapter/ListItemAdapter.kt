@@ -9,17 +9,17 @@ import android.widget.TextView
 import com.handmadecode.langlang.R
 import com.handmadecode.langlang.data.Languages
 
-class ListItemAdapter(context: Context, list : ArrayList<Languages>) : BaseAdapter() {
-    private val context=context
-    private val list =list
+class ListItemAdapter(context: Context, list: ArrayList<Languages>) : BaseAdapter() {
+    private val context = context
+    private val list = list
 
     override fun getItem(position: Int): Any {
-       return list.get(position)
+        return list.get(position)
     }
 
     override fun getItemId(position: Int): Long {
 //        var lang:Languages= list.get(position)
-       return  0
+        return 0
     }
 
     override fun getCount(): Int {
@@ -27,21 +27,21 @@ class ListItemAdapter(context: Context, list : ArrayList<Languages>) : BaseAdapt
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-       val context:Context=parent!!.context
-        var view  = convertView
-        if(view==null){
-            var inflater : LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = inflater.inflate(R.layout.list_item,parent,false)
+        val context: Context = parent!!.context
+        var view = convertView
+        if (view == null) {
+            var inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            view = inflater.inflate(R.layout.list_item, parent, false)
         }
-        val listViewItem=list[position]
+        val listViewItem = list[position]
 
-        for((index:Int,lang:String) in listViewItem.langs.withIndex()){
-            val id :Int = context.resources.getIdentifier("lang${index+1}","id",context.packageName)
-            val tv =view!!. findViewById<TextView>(id)
-            tv.visibility=View.VISIBLE
+        for ((index: Int, lang: String) in listViewItem.langs.withIndex()) {
+            val id: Int = context.resources.getIdentifier("lang${index + 1}", "id", context.packageName)
+            val tv = view!!.findViewById<TextView>(id)
+            tv.visibility = View.VISIBLE
             tv.setText(lang)
         }
-        val textView=view!!.findViewById<TextView>(R.id.origin_text)
+        val textView = view!!.findViewById<TextView>(R.id.origin_text)
         textView.setText(listViewItem.origin_text)
         return view
     }
