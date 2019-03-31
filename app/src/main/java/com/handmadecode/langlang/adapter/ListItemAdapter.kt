@@ -1,4 +1,4 @@
-package com.handmadecode.langlang
+package com.handmadecode.langlang.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.handmadecode.langlang.R
 import com.handmadecode.langlang.data.Languages
-import org.w3c.dom.Text
 
 class ListItemAdapter(context: Context, list : ArrayList<Languages>) : BaseAdapter() {
     private val context=context

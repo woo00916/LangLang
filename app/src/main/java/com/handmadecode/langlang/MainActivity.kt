@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 
 import android.os.Bundle
 import android.widget.*
+import com.handmadecode.langlang.adapter.ListItemAdapter
+import com.handmadecode.langlang.data.Languages
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -24,19 +26,25 @@ class MainActivity : AppCompatActivity() {
         //views
         val trans_et = findViewById<EditText>(R.id.et_txt) //edit text obj
         //result list
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, result_list)
-        val listview = findViewById<ListView>(R.id.lv_result)
-        listview.setAdapter(adapter)
+      //  val adapter = ArrayAdapter(this, findViewById<LinearLayout>(R.id.list_item), result_list)
+//        val adapter = ListItemAdapter(this, arrayListOf())
+//        val listview = findViewById<ListView>(R.id.lv_result)
+//        listview.setAdapter(adapter)
 
-        listview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->  })
+//        listview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->  })
 
         //when the btn clicked
         btn_tr.setOnClickListener {
             val cur_txt = trans_et.text.toString()// fetch string
             if (cur_txt != txt_before && cur_txt.isNotEmpty() && checkDeviceNetworking()) {//not same with before & not empty?& connected&&apiconn.con!=null
-                for (lang in LANGS) {
-                   TranslationThread(this, adapter).execute(cur_txt, LANG, lang)
-                }
+//                for (lang in LANGS) {
+//                   TranslationThread(this, adapter).execute(cur_txt, LANG, lang)
+//                }
+                val testlist= arrayListOf<Languages>(Languages("한국어", arrayListOf<String>("this"),1))
+                val adapter = ListItemAdapter(this, testlist)
+                val listview = findViewById<ListView>(R.id.lv_result)
+                listview.setAdapter(adapter)
+
                 txt_before = cur_txt
             }
         }

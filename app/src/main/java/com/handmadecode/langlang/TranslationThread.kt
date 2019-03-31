@@ -26,7 +26,6 @@ class TranslationThread(val context: MainActivity, val adapter: ArrayAdapter<Str
         return PapagoAPIManager().request(txt,from,to)
     }
 
-
     override fun onPostExecute(result: String) {
         super.onPostExecute(result)
 
