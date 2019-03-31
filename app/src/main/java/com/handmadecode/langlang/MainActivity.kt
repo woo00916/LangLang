@@ -9,15 +9,21 @@ import android.os.Bundle
 import android.widget.*
 import com.handmadecode.langlang.adapter.ListItemAdapter
 import com.handmadecode.langlang.data.Languages
+import com.handmadecode.langlang.data.Response
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,AsyncResponse{
+
     //language setting
     val LANG = "ko"
     val LANGS = arrayListOf<String>("en", "ja")
+    var reqId :Int = 0
 
     var txt_before: String = "" // string to be translated
-    val result_list = arrayListOf<String>() //list which will save result
+    val result_list = arrayListOf<Languages>() //list which will save result
+    val temp_list = arrayListOf<Languages>()
+
+    var adapter:ListItemAdapter?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,10 +32,9 @@ class MainActivity : AppCompatActivity() {
         //views
         val trans_et = findViewById<EditText>(R.id.et_txt) //edit text obj
         //result list
-      //  val adapter = ArrayAdapter(this, findViewById<LinearLayout>(R.id.list_item), result_list)
-//        val adapter = ListItemAdapter(this, arrayListOf())
-//        val listview = findViewById<ListView>(R.id.lv_result)
-//        listview.setAdapter(adapter)
+         adapter = ListItemAdapter(this, result_list)
+        val listview = findViewById<ListView>(R.id.lv_result)
+        listview.setAdapter(adapter)
 
 //        listview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->  })
 
@@ -37,19 +42,27 @@ class MainActivity : AppCompatActivity() {
         btn_tr.setOnClickListener {
             val cur_txt = trans_et.text.toString()// fetch string
             if (cur_txt != txt_before && cur_txt.isNotEmpty() && checkDeviceNetworking()) {//not same with before & not empty?& connected&&apiconn.con!=null
-//                for (lang in LANGS) {
-//                   TranslationThread(this, adapter).execute(cur_txt, LANG, lang)
-//                }
-                val testlist= arrayListOf<Languages>(Languages("한국어", arrayListOf<String>("this"),1))
-                val adapter = ListItemAdapter(this, testlist)
-                val listview = findViewById<ListView>(R.id.lv_result)
-                listview.setAdapter(adapter)
-
+                temp_list.add(Languages(cur_txt, arrayListOf(),reqId++))
+                for (lang in LANGS) {
+                   TranslationThread(this).execute(cur_txt, LANG, lang,reqId.toString())
+                }
                 txt_before = cur_txt
             }
         }
 
     }
+    override fun processFinish(output: Response) {
+        var item:Languages? = temp_list.find{reqId==output.reqId}
+        item!!.langs.add(output.result)
+        if(item!!.langs.size==LANGS.size){
+            result_list.add(item)
+            temp_list.remove(item)
+            adapter!!.notifyDataSetChanged()
+        }
+
+    }
+
+
     private  fun checkDeviceNetworking():Boolean{
         val connMgr :ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo :NetworkInfo? = connMgr.getActiveNetworkInfo()

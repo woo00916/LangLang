@@ -18,8 +18,8 @@ class ListItemAdapter(context: Context, list : ArrayList<Languages>) : BaseAdapt
     }
 
     override fun getItemId(position: Int): Long {
-        var lang:Languages= list.get(position)
-       return  lang.reqId
+//        var lang:Languages= list.get(position)
+       return  0
     }
 
     override fun getCount(): Int {
@@ -35,8 +35,9 @@ class ListItemAdapter(context: Context, list : ArrayList<Languages>) : BaseAdapt
         }
         val listViewItem=list[position]
 
-        for(lang:String in listViewItem.langs){
-            val tv =view!!. findViewById<TextView>(R.id.lang1)
+        for((index:Int,lang:String) in listViewItem.langs.withIndex()){
+            val id :Int = context.resources.getIdentifier("lang${index+1}","id",context.packageName)
+            val tv =view!!. findViewById<TextView>(id)
             tv.visibility=View.VISIBLE
             tv.setText(lang)
         }
