@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
         var item: Languages? = temp_list.find { reqId == output.reqId }
         item!!.langs.add(output.result)
         if (item!!.langs.size == LANGS.size) {
-            result_list.add(item)
+            result_list.add(0,item)
             temp_list.remove(item)
             adapter!!.notifyDataSetChanged()
         }
