@@ -1,15 +1,16 @@
 package com.handmadecode.langlang
+import com.handmadecode.langlang.data.*
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import android.support.v7.app.AppCompatActivity
+import android.os.AsyncTask
 
 import android.os.Bundle
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.facebook.stetho.Stetho
 import com.handmadecode.langlang.adapter.ListItemAdapter
-import com.handmadecode.langlang.data.Languages
-import com.handmadecode.langlang.data.Response
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), AsyncResponse {
@@ -20,14 +21,15 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
     var reqId: Int = 0
 
     var txt_before: String = "" // string to be translated
-    val result_list = arrayListOf<Languages>() //list which will save result
-    val temp_list = arrayListOf<Languages>()
+    val result_list = arrayListOf<TransResultItem>() //list which will save result
+    val temp_list = arrayListOf<TransResultItem>()
 
     var adapter: ListItemAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val context = applicationContext ?: return
 
         //views
         val trans_et = findViewById<EditText>(R.id.et_txt) //edit text obj
@@ -35,14 +37,25 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
         adapter = ListItemAdapter(this, result_list)
         val listview = findViewById<ListView>(R.id.lv_result)
         listview.setAdapter(adapter)
+        Stetho.initialize(
+            Stetho.newInitializerBuilder(this)
+                .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                .build())
 
+        val myEntity=Result.create("00-jp","테스트","テスト")
+        val db = HistoryDB.getInstance(context)
+        var dao=db?.historydao()
+
+        if (dao !=null)
+         InsertHistory(dao).execute(myEntity)
 //        listview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->  })
 
         //when the btn clicked
         btn_tr.setOnClickListener {
             val cur_txt = trans_et.text.toString()// fetch string
             if (cur_txt != txt_before && cur_txt.isNotEmpty() && checkDeviceNetworking()) {//not same with before & not empty?& connected&&apiconn.con!=null
-                temp_list.add(Languages(cur_txt, arrayListOf(), reqId++))
+                temp_list.add(TransResultItem(cur_txt, arrayListOf(), reqId++))
                 for (lang in LANGS) {
                     TranslationThread(this).execute(cur_txt, LANG, lang, reqId.toString())
                 }
@@ -52,7 +65,7 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
     }
 
     override fun processFinish(output: Response) {
-        var item: Languages? = temp_list.find { reqId == output.reqId }
+        var item: TransResultItem? = temp_list.find { reqId == output.reqId }
         item!!.langs.add(output.result)
         if (item!!.langs.size == LANGS.size) {
             result_list.add(0,item)
@@ -73,4 +86,15 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
         return true
     }
 
+
+
 }
+    private class InsertHistory(_dao:HistoryDAO) : AsyncTask<Result, Any, Any>(){
+        val dao=_dao
+
+        override fun doInBackground(vararg params: Result): Any? {
+                dao.insertAll(params[0])
+            return null
+        }
+
+    }

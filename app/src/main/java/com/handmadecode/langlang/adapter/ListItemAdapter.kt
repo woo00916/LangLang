@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.handmadecode.langlang.R
-import com.handmadecode.langlang.data.Languages
+import com.handmadecode.langlang.data.TransResultItem
 
-class ListItemAdapter(context: Context, list: ArrayList<Languages>) : BaseAdapter() {
+class ListItemAdapter(context: Context, list: ArrayList<TransResultItem>) : BaseAdapter() {
     private val context = context
     private val list = list
 
@@ -18,7 +18,7 @@ class ListItemAdapter(context: Context, list: ArrayList<Languages>) : BaseAdapte
     }
 
     override fun getItemId(position: Int): Long {
-//        var lang:Languages= list.get(position)
+//        var lang:TransResultItem= list.get(position)
         return 0
     }
 
