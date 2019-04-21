@@ -4,10 +4,9 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import org.jetbrains.annotations.NotNull
 
 @Entity(tableName = "History")
-class Result{
+class History{
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="reqId")
     @NonNull
@@ -34,8 +33,8 @@ class Result{
     var result_5: String?=null
 
     companion object {
-        fun create(_ori:String,  _langs: ArrayList<String>)  : Result{
-            val history = Result()
+        fun create(_ori:String,  _langs: ArrayList<String>)  : History{
+            val history = History()
             history.ori = _ori
 
             history.result_1=_langs[0]

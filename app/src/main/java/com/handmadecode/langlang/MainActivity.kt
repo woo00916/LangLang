@@ -26,14 +26,14 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
 
     var adapter: ListItemAdapter? = null
 
-    lateinit var  db:HistoryDB
+    lateinit var  db:LnagLangDB
    lateinit var  dao:HistoryDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val context = applicationContext ?: return
-        db= HistoryDB.getInstance(applicationContext)
+        db= LnagLangDB.getInstance(applicationContext)
         dao =db?.historydao()
         //views
         val trans_et = findViewById<EditText>(R.id.et_txt) //edit text obj
@@ -63,14 +63,14 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
             result_list.add(0,item)
             temp_list.remove(item)
             adapter!!.notifyDataSetChanged()
-            InsertHistory(dao).execute(Result.create(item.origin_text,item._langs))
+            InsertHistory(dao).execute(History.create(item.origin_text,item._langs))
         }
 
     }
 
-    private class InsertHistory(_dao:HistoryDAO) : AsyncTask<Result, Any, Any>(){
+    private class InsertHistory(_dao:HistoryDAO) : AsyncTask<History, Any, Any>(){
         val dao=_dao
-        override fun doInBackground(vararg params: Result): Any? {
+        override fun doInBackground(vararg params: History): Any? {
             dao.insertAll(params[0])
             return null
         }
