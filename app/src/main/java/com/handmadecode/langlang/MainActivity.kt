@@ -26,30 +26,22 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
 
     var adapter: ListItemAdapter? = null
 
+    lateinit var  db:HistoryDB
+   lateinit var  dao:HistoryDAO
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val context = applicationContext ?: return
-
+        db= HistoryDB.getInstance(applicationContext)
+        dao =db?.historydao()
         //views
         val trans_et = findViewById<EditText>(R.id.et_txt) //edit text obj
         //result list
         adapter = ListItemAdapter(this, result_list)
         val listview = findViewById<ListView>(R.id.lv_result)
         listview.setAdapter(adapter)
-        Stetho.initialize(
-            Stetho.newInitializerBuilder(this)
-                .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                .build())
-
-        val myEntity=Result.create("00-jp","테스트","テスト")
-        val db = HistoryDB.getInstance(context)
-        var dao=db?.historydao()
-
-        if (dao !=null)
-         InsertHistory(dao).execute(myEntity)
-//        listview.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->  })
+        Stetho.initializeWithDefaults(this)
 
         //when the btn clicked
         btn_tr.setOnClickListener {
@@ -71,6 +63,16 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
             result_list.add(0,item)
             temp_list.remove(item)
             adapter!!.notifyDataSetChanged()
+            InsertHistory(dao).execute(Result.create(item.origin_text,item._langs))
+        }
+
+    }
+
+    private class InsertHistory(_dao:HistoryDAO) : AsyncTask<Result, Any, Any>(){
+        val dao=_dao
+        override fun doInBackground(vararg params: Result): Any? {
+            dao.insertAll(params[0])
+            return null
         }
 
     }
@@ -89,12 +91,4 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
 
 
 }
-    private class InsertHistory(_dao:HistoryDAO) : AsyncTask<Result, Any, Any>(){
-        val dao=_dao
 
-        override fun doInBackground(vararg params: Result): Any? {
-                dao.insertAll(params[0])
-            return null
-        }
-
-    }

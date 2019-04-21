@@ -14,13 +14,13 @@ abstract class HistoryDB : RoomDatabase() {
 
     companion object {
         private var db:HistoryDB?=null
-        fun getInstance(context: Context):HistoryDB?{
+        fun getInstance(context: Context):HistoryDB{
             if(db==null){
                 synchronized(HistoryDB::class){
                     db = Room.databaseBuilder(context.getApplicationContext(),HistoryDB::class.java,"HistoryDB.db").build()
                 }
             }
-        return db
+        return if (db != null) db as HistoryDB else throw NullPointerException("Expression 'db' must not be null")
         }
     }
 }

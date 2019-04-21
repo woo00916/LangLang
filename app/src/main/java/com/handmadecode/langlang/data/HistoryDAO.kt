@@ -7,4 +7,5 @@ import androidx.room.Insert
 interface HistoryDAO {
     @Insert
     fun insertAll(vararg history:Result)
+
 }

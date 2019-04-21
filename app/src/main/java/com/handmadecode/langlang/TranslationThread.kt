@@ -8,7 +8,7 @@ interface AsyncResponse {
     fun processFinish(output: Response)
 }
 
-class TranslationThread(_delegate: AsyncResponse) : AsyncTask<String, String, Response>() {
+class TranslationThread(_delegate: AsyncResponse) : AsyncTask<String,String,Response>() {
     val delegate = _delegate
 
     override fun onPreExecute() {
