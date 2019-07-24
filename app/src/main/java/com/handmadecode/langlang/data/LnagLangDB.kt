@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 
 @Database(entities = arrayOf(History::class),version = 1)
+@TypeConverters(Converter::class)   // add here
 abstract class LnagLangDB : RoomDatabase() {
     abstract fun historydao():HistoryDAO
 
