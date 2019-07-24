@@ -1,7 +1,6 @@
 package com.handmadecode.langlang
 
 import android.os.AsyncTask
-import android.widget.ArrayAdapter
 import com.handmadecode.langlang.data.Response
 
 interface AsyncResponse {

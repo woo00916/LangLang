@@ -3,8 +3,5 @@
 
     <string name="network_alert">네트워크 상태를 확인해주세요</string>
 
-    <string name="api_url">https://openapi.naver.com/v1/papago/n2mt</string>
-    <string name="api_key">US5cC2jdaKXwX3kCQNNX</string>
-    <string name="api_pw">U2_pZZL8cd</string>
 
 </resources>

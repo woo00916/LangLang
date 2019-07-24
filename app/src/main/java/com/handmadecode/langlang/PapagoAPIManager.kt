@@ -1,5 +1,6 @@
 package com.handmadecode.langlang
 
+import android.content.Context
 import android.content.res.Resources
 import androidx.core.content.res.TypedArrayUtils.getText
 import org.json.JSONObject
@@ -9,14 +10,18 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import android.location.Geocoder
+
+
 
 class PapagoAPIManager {
-    private val clientId =Resources.getSystem().getString(R.string.api_key)//애플리케이션 클라이언트 아이디값";
-    private val clientSecret =Resources.getSystem().getString(R.string.api_pw)//애플리케이션 클라이언트 시크릿값";
-    private val apiURL  = Resources.getSystem().getString(R.string.api_url)
+
+    private  val clientId :String = "US5cC2jdaKXwX3kCQNNX"
+    private  val clientSecret:String="U2_pZZL8cd"
+    private  val apiURL  :String="https://openapi.naver.com/v1/papago/n2mt"
+
 
     public fun request(txt:String,from:String,to:String) : String{
-
         val response = StringBuffer()
         var result =""
         val text = URLEncoder.encode(txt, "UTF-8")
