@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), AsyncResponse {
         val connMgr: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo: NetworkInfo? = connMgr.getActiveNetworkInfo()
         if (networkInfo == null || !networkInfo.isConnected) {
-            Toast.makeText(this, "네트워크 상태를 확인해주세요", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,getText(R.string.network_alert), Toast.LENGTH_SHORT).show()
             return false
         }
         return true
